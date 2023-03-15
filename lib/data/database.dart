@@ -1,20 +1,24 @@
+import 'dart:ffi';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 class DataBase {
-  final _mybox = Hive.box('mybox');
+  final _mybox = Hive.box('myBox');
   List todoList = [];
-  void intialData() {
+  void initialSate() {
     todoList = [
-      ['Make Tutorial', false],
-      ['Do Exercise', false],
+      ['Do Excerise', false],
+      ['Do Coding', true]
     ];
   }
 
-  void loadData() {
-    todoList = _mybox.get('TODOLIST');
+  void loadState() {
+    todoList = _mybox.get("TODO");
   }
 
-  void updateData() {
-    _mybox.put("TODOLIST", todoList);
+  void updateState() {
+    _mybox.put('TODO', todoList);
   }
 }
+
+final db = DataBase();

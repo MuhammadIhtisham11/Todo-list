@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/screen/homeScreen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todolist/screen/homeScreen.dart';
 
 void main() async {
   await Hive.initFlutter();
-  var box = await Hive.openBox('mybox');
+  var box = await Hive.openBox('myBox');
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'To Do List',
+      theme: ThemeData(primarySwatch: Colors.green),
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-      theme: ThemeData(primarySwatch: Colors.grey),
+      home: TodoListScreen(),
     );
   }
 }

@@ -1,51 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gap/gap.dart';
 
-class Tile extends StatelessWidget {
-  String nameTask;
-  bool taskCompleted;
-  Function(bool?)? onchangeMethod;
-  Function(BuildContext) deleteFunction;
-  Tile(
-      {super.key,
-      required this.nameTask,
-      required this.taskCompleted,
-      required this.onchangeMethod,
-      required this.deleteFunction});
+class TodoTiles extends StatelessWidget {
+  String taskName;
+  Function(bool?)? onChange;
+  Function(BuildContext)? deleteTask;
+  bool value;
+  TodoTiles({
+    super.key,
+    required this.taskName,
+    required this.value,
+    required this.onChange,
+    required this.deleteTask,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20, top: 20, left: 20),
+      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Slidable(
         endActionPane: ActionPane(motion: StretchMotion(), children: [
+          Gap(20),
           SlidableAction(
-            onPressed: deleteFunction,
+            backgroundColor: Colors.white,
+            onPressed: deleteTask,
             icon: Icons.delete,
-            backgroundColor: Colors.red,
             borderRadius: BorderRadius.circular(10),
-          ),
+          )
         ]),
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(12)),
+              border: Border.all(width: 2, color: Colors.green),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white),
           child: Row(
             children: [
               Checkbox(
-                value: taskCompleted,
-                onChanged: onchangeMethod,
+                value: value,
+                onChanged: onChange,
+                checkColor: Colors.green,
                 activeColor: Colors.black,
+                hoverColor: Colors.blue,
               ),
+              Gap(5),
               Text(
-                '$nameTask',
-                style: TextStyle(
-                  decoration: taskCompleted
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                ),
-              ),
+                '$taskName',
+                style:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
+              )
             ],
           ),
         ),

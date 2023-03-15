@@ -4,84 +4,87 @@ import 'package:todolist/data/database.dart';
 import 'package:todolist/widget/dialogBox.dart';
 import 'package:todolist/widget/tiles.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class TodoListScreen extends StatefulWidget {
+  const TodoListScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<TodoListScreen> createState() => _TodoListScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final _mybox = Hive.box('mybox');
-  DataBase db = DataBase();
+class _TodoListScreenState extends State<TodoListScreen> {
+  final _mybox = Hive.box('myBox');
   final _controller = TextEditingController();
   @override
   void initState() {
-    if (_mybox.get('TODOLIST') == null) {
-      db.intialData();
-    } else {
-      db.loadData();
-    }
     super.initState();
+    if (_mybox.get("TODO") == null) {
+      db.initialSate();
+    } else {
+      db.loadState();
+    }
   }
 
-  void checkedBoxChanged(int index, bool? value) {
+  void updateTask(int index, bool? value) {
     setState(() {
       db.todoList[index][1] = !db.todoList[index][1];
     });
-    db.updateData();
-  }
-
-  void addNewTask() {
-    showDialog(
-        context: context,
-        builder: (v) {
-          return DialogBox(
-            controller: _controller,
-            onSave: saveNewTask,
-            onCancel: () => Navigator.of(context).pop(),
-          );
-        });
-  }
-
-  void saveNewTask() {
-    setState(() {
-      db.todoList.add([_controller.text, false]);
-      _controller.clear();
-    });
-    Navigator.of(context).pop();
-    db.updateData();
+    db.updateState();
   }
 
   void deleteTask(int index) {
     setState(() {
       db.todoList.removeAt(index);
     });
-    db.updateData();
+    db.updateState();
+  }
+
+  void addNewTask() {
+    setState(() {
+      db.todoList.add(['${_controller.text}', false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
+    db.updateState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade400,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Center(child: Text('To Do List')),
-        elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: addNewTask,
+        title: Center(child: Text('Todo List')),
+        backgroundColor: Color.fromARGB(31, 209, 201, 201),
       ),
       body: ListView.builder(
-          itemCount: db.todoList.length,
-          itemBuilder: (context, index) {
-            return Tile(
-              nameTask: db.todoList[index][0],
-              taskCompleted: db.todoList[index][1],
-              onchangeMethod: (value) => checkedBoxChanged(index, value),
-              deleteFunction: (value) => deleteTask(index),
-            );
-          }),
+        itemCount: db.todoList.length,
+        itemBuilder: (context, index) {
+          return TodoTiles(
+            taskName: db.todoList[index][0],
+            value: db.todoList[index][1],
+            onChange: (v) => updateTask(index, v),
+            deleteTask: (v) => deleteTask(index),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: showDialogBox,
+        child: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  void showDialogBox() {
+    showDialog(
+      context: context,
+      builder: (v) => Dialogbox(
+        onCancel: () => Navigator.of(context).pop(),
+        onSave: addNewTask,
+        controller: _controller,
+      ),
     );
   }
 }

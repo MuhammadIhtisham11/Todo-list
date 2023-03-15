@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:todolist/widget/mybutton.dart';
 
-class DialogBox extends StatelessWidget {
+class Dialogbox extends StatelessWidget {
   final controller;
   VoidCallback onSave;
   VoidCallback onCancel;
-  DialogBox(
-      {super.key,
+  Dialogbox(
+      {required this.onCancel,
       required this.onSave,
-      required this.onCancel,
-      required this.controller});
+      required this.controller,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.grey.shade400,
       content: Container(
         height: 120,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -26,21 +24,16 @@ class DialogBox extends StatelessWidget {
               controller: controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Enter New Task',
+                hintText: 'Add New Task',
+                hintStyle: TextStyle(color: Colors.green),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                MyButton(
-                  name: 'Save',
-                  onClick: onSave,
-                ),
+                MyButton(btnName: 'Cancel', OnClick: onCancel),
                 Gap(5),
-                MyButton(
-                  name: 'Cancel',
-                  onClick: onCancel,
-                )
+                MyButton(btnName: 'Save', OnClick: onSave),
               ],
             )
           ],

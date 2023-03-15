@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
-  String name;
-  VoidCallback onClick;
-  MyButton({super.key, required this.name, required this.onClick});
+  String btnName;
+  VoidCallback OnClick;
+  MyButton({super.key, required this.btnName, required this.OnClick});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      splashColor: Colors.black,
-      color: Theme.of(context).primaryColor,
-      onPressed: onClick,
-      child: Text('$name'),
+      onPressed: OnClick,
+      child: Text(
+        '$btnName',
+        style: TextStyle(
+          color: Colors.green,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
